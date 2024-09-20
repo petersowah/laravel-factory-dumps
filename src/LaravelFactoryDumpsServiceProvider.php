@@ -2,9 +2,9 @@
 
 namespace PeterSowah\LaravelFactoryDumps;
 
+use PeterSowah\LaravelFactoryDumps\Commands\LaravelFactoryDumpsCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use PeterSowah\LaravelFactoryDumps\Commands\LaravelFactoryDumpsCommand;
 
 class LaravelFactoryDumpsServiceProvider extends PackageServiceProvider
 {
