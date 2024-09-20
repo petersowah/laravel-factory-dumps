@@ -2,7 +2,6 @@
 
 namespace PeterSowah\LaravelFactoryDumps\Traits;
 
-
 use PeterSowah\LaravelFactoryDumps\Collections\ExportableCollection;
 
 trait ExportableFactory

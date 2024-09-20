@@ -8,13 +8,14 @@ use League\Csv\Exception;
 use League\Csv\UnavailableStream;
 use PeterSowah\LaravelFactoryDumps\Collections\ExportableCollection;
 
-class LaravelFactoryDumps {
+class LaravelFactoryDumps
+{
     /**
      * Export the given collection of models to CSV.
      *
-     * @param Collection $models
-     * @param null $fileName
-     * @return string
+     * @param  Collection  $models
+     * @param  null  $fileName
+     *
      * @throws CannotInsertRecord
      * @throws Exception
      * @throws UnavailableStream
@@ -25,15 +26,16 @@ class LaravelFactoryDumps {
             return $models->toCsv($fileName);
         }
 
-        throw new \RuntimeException("Invalid collection type. Ensure your model uses ExportableCollection.");
+        throw new \RuntimeException('Invalid collection type. Ensure your model uses ExportableCollection.');
     }
 
     /**
      * Export the given collection of models to Excel.
      *
-     * @param Collection $models
-     * @param null $fileName
+     * @param  Collection  $models
+     * @param  null  $fileName
      * @return string
+     *
      * @throws \Exception
      */
     public static function toExcel($models, $fileName = null)
@@ -42,6 +44,6 @@ class LaravelFactoryDumps {
             return $models->toExcel($fileName);
         }
 
-        throw new \RuntimeException("Invalid collection type. Ensure your model uses ExportableCollection.");
+        throw new \RuntimeException('Invalid collection type. Ensure your model uses ExportableCollection.');
     }
 }

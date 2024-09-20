@@ -6,8 +6,7 @@ use Maatwebsite\Excel\Concerns\FromArray;
 
 class ExportFactory implements FromArray
 {
-    public function __construct(protected  array $data)
-    {}
+    public function __construct(protected array $data) {}
 
     public function array(): array
     {

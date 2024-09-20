@@ -33,20 +33,18 @@ class ExportableFactoryTest extends TestCase
     /**
      * Define environment setup.
      *
-     * @param \Illuminate\Foundation\Application $app
-     * @return void
+     * @param  \Illuminate\Foundation\Application  $app
      */
     public function getEnvironmentSetUp($app): void
     {
         // Set up your database configuration here
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [
-            'driver'   => 'sqlite',
+            'driver' => 'sqlite',
             'database' => ':memory:',
-            'prefix'   => '',
+            'prefix' => '',
         ]);
     }
-
 
     /** @test */
     public function it_can_export_factory_data_to_csv_after_creation(): void
