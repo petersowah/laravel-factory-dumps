@@ -65,4 +65,44 @@ class ExportableFactoryTest extends TestCase
         $this->assertFileExists($excelFile);
         $this->assertStringContainsString('users.xlsx', $excelFile);
     }
+
+    /** @test */
+    public function it_can_export_all_users_to_csv_using_static_method(): void
+    {
+        // Create some users
+        User::factory()->count(10)->create();
+
+        // Export using static method
+        $csvFile = User::toCsv();
+
+        $this->assertFileExists($csvFile);
+        $this->assertStringContainsString('users.csv', $csvFile);
+    }
+
+    /** @test */
+    public function it_can_export_all_users_to_excel_using_static_method(): void
+    {
+        // Create some users
+        User::factory()->count(10)->create();
+
+        // Export using static method
+        $excelFile = User::toExcel();
+
+        $this->assertFileExists($excelFile);
+        $this->assertStringContainsString('users.xlsx', $excelFile);
+    }
+
+    /** @test */
+    public function it_can_export_with_custom_filename(): void
+    {
+        User::factory()->count(10)->create();
+
+        $excelFile = User::toExcel('custom-users.xlsx');
+        $csvFile = User::toCsv('custom-users.csv');
+
+        $this->assertFileExists($excelFile);
+        $this->assertFileExists($csvFile);
+        $this->assertStringContainsString('custom-users.xlsx', $excelFile);
+        $this->assertStringContainsString('custom-users.csv', $csvFile);
+    }
 }
