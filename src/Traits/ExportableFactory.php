@@ -18,12 +18,14 @@ trait ExportableFactory
     public static function toExcel(?string $fileName = null): string
     {
         $models = static::all();
+
         return LaravelFactoryDumps::toExcel($models, $fileName);
     }
 
     public static function toCsv(?string $fileName = null): string
     {
         $models = static::all();
+
         return LaravelFactoryDumps::toCsv($models, $fileName);
     }
 }
