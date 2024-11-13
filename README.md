@@ -1,34 +1,19 @@
 <p align="center"><img src="/art/social-card.svg" alt="Social Card of Laravel Activity Log"></p>
-# A package that helps dumps factory generated data to csv or xlsx format
+
+# Easily export your Eloquent models to Excel and CSV formats.
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/petersowah/laravel-factory-dumps.svg?style=flat-square)](https://packagist.org/packages/petersowah/laravel-factory-dumps)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/petersowah/laravel-factory-dumps/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/petersowah/laravel-factory-dumps/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/petersowah/laravel-factory-dumps/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/petersowah/laravel-factory-dumps/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/petersowah/laravel-factory-dumps.svg?style=flat-square)](https://packagist.org/packages/petersowah/laravel-factory-dumps)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/laravel-factory-dumps.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/laravel-factory-dumps)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
-
+This package helps with exporting factory generated data and Eloquent collections to csv or xlsx formats.
 ## Installation
 
 You can install the package via composer:
 
 ```bash
 composer require petersowah/laravel-factory-dumps
-```
-
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag="laravel-factory-dumps-migrations"
-php artisan migrate
 ```
 
 You can publish the config file with:
@@ -41,21 +26,34 @@ This is the contents of the published config file:
 
 ```php
 return [
+ 'path' => env('FACTORY_DUMPS_PATH', __DIR__.'/../workbench/database/dumps'),
 ];
 ```
 
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="laravel-factory-dumps-views"
-```
-
 ## Usage
+### Import the `ExportableFactory` trait in your model. Eg.
 
 ```php
-$laravelFactoryDumps = new PeterSowah\LaravelFactoryDumps();
-echo $laravelFactoryDumps->echoPhrase('Hello, PeterSowah!');
+use PeterSowah\LaravelFactoryDumps\Traits\ExportableFactory;
 ```
+
+### Use the `toExcel` method to export the data to excel.
+```php
+$user = User::factory()->create()->toExcel();
+```
+
+### Use the `toCsv` method to export the data to csv.
+```php
+$user = User::factory()->create()->toCsv();
+```
+### You may also use the method `toExcel` and `toCsv` to export eloquent collections.
+
+```php
+$users = User::whereNotNull('email_verified_at')->get();
+$users->toExcel();
+$users->toCsv();
+```
+
 
 ## Testing
 
