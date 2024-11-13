@@ -39,12 +39,12 @@ use PeterSowah\LaravelFactoryDumps\Traits\ExportableFactory;
 
 ### Use the `toExcel` method to export the data to excel.
 ```php
-$user = User::factory()->create()->toExcel();
+$user = User::factory(100)->create()->toExcel();
 ```
 
 ### Use the `toCsv` method to export the data to csv.
 ```php
-$user = User::factory()->create()->toCsv();
+$user = User::factory(100)->create()->toCsv();
 ```
 ### You may also use the method `toExcel` and `toCsv` to export eloquent collections.
 
