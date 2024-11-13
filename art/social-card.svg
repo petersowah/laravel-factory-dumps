@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640">
+    <!-- Background -->
+    <rect width="1280" height="640" fill="#1a202c"/>
+
+    <!-- Laravel Logo (simplified) -->
+    <polygon points="540,240 580,240 560,300 520,300" fill="#FF2D20"/>
+    <polygon points="560,300 600,300 580,360 540,360" fill="#FF2D20"/>
+
+    <!-- File Icons -->
+    <!-- CSV File -->
+    <rect x="640" y="240" width="100" height="140" rx="10" fill="#4299e1"/>
+    <text x="690" y="320" font-family="system-ui" font-size="32" fill="white" text-anchor="middle">CSV</text>
+
+    <!-- Excel File -->
+    <rect x="780" y="240" width="100" height="140" rx="10" fill="#48bb78"/>
+    <text x="830" y="320" font-family="system-ui" font-size="32" fill="white" text-anchor="middle">XLS</text>
+
+    <!-- Text -->
+    <text x="640" y="460" font-family="system-ui" font-size="48" fill="white" text-anchor="middle">Laravel Collection Exports</text>
+    <text x="640" y="500" font-family="system-ui" font-size="24" fill="#a0aec0" text-anchor="middle">Export to CSV &amp; Excel</text>
+
+    <!-- Decorative Circles -->
+    <circle cx="200" cy="200" r="40" fill="#FF2D20" fill-opacity="0.2"/>
+    <circle cx="1080" cy="440" r="40" fill="#FF2D20" fill-opacity="0.2"/>
+</svg>

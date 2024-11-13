@@ -1,3 +1,4 @@
+<p align="center"><img src="/art/social-card.svg" alt="Social Card of Laravel Activity Log"></p>
 # A package that helps dumps factory generated data to csv or xlsx format
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/petersowah/laravel-factory-dumps.svg?style=flat-square)](https://packagist.org/packages/petersowah/laravel-factory-dumps)
