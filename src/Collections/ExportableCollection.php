@@ -15,6 +15,24 @@ use PeterSowah\LaravelFactoryDumps\Exports\ExportFactory;
 class ExportableCollection extends Collection
 {
     /**
+     * Pluck specific columns from the collection.
+     *
+     * @param  string|array  $value
+     * @param  string|null  $key
+     * @return static
+     */
+    public function pluck($value, $key = null): self
+    {
+        $columns = is_array($value) ? $value : [$value];
+        
+        $this->items = $this->map(function ($item) use ($columns) {
+            return collect($item)->only($columns)->toArray();
+        })->all();
+
+        return $this;
+    }
+
+    /**
      * Export the collection to a CSV file.
      *
      * @throws UnavailableStream
@@ -24,7 +42,11 @@ class ExportableCollection extends Collection
     public function toCsv(?string $fileName = null): string
     {
         // Define the default file name if not provided
-        $fileName = $fileName ?? ($this->first()->getTable().'.csv');
+        $firstItem = $this->first();
+        $tableName = is_object($firstItem) && method_exists($firstItem, 'getTable') 
+            ? $firstItem->getTable() 
+            : 'export';
+        $fileName = $fileName ?? ($tableName.'.csv');
 
         // Use database_path() for a better path structure
         $filePath = database_path("dumps/csv/{$fileName}");
@@ -34,7 +56,8 @@ class ExportableCollection extends Collection
 
         // Create CSV Writer and write headers and content
         $csv = Writer::createFromPath($filePath, 'w+');
-        $csv->insertOne(array_keys($this->first()->toArray())); // Insert headers
+        $firstItemArray = is_object($firstItem) ? $firstItem->toArray() : $firstItem;
+        $csv->insertOne(array_keys($firstItemArray)); // Insert headers
 
         foreach ($this->toArray() as $row) {
             $csv->insertOne($row); // Insert each row of data
@@ -48,7 +71,11 @@ class ExportableCollection extends Collection
      */
     public function toExcel(?string $fileName = null): string
     {
-        $fileName = $fileName ?? ($this->first()->getTable().'.xlsx');
+        $firstItem = $this->first();
+        $tableName = is_object($firstItem) && method_exists($firstItem, 'getTable') 
+            ? $firstItem->getTable() 
+            : 'export';
+        $fileName = $fileName ?? ($tableName.'.xlsx');
 
         $relativePath = 'dumps/excel';
         $fullPath = database_path($relativePath);
