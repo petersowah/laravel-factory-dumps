@@ -24,7 +24,7 @@ class ExportableCollection extends Collection
     public function pluck($value, $key = null): self
     {
         $columns = is_array($value) ? $value : [$value];
-        
+
         $this->items = $this->map(function ($item) use ($columns) {
             return collect($item)->only($columns)->toArray();
         })->all();
@@ -43,8 +43,8 @@ class ExportableCollection extends Collection
     {
         // Define the default file name if not provided
         $firstItem = $this->first();
-        $tableName = is_object($firstItem) && method_exists($firstItem, 'getTable') 
-            ? $firstItem->getTable() 
+        $tableName = is_object($firstItem) && method_exists($firstItem, 'getTable')
+            ? $firstItem->getTable()
             : 'export';
         $fileName = $fileName ?? ($tableName.'.csv');
 
@@ -72,8 +72,8 @@ class ExportableCollection extends Collection
     public function toExcel(?string $fileName = null): string
     {
         $firstItem = $this->first();
-        $tableName = is_object($firstItem) && method_exists($firstItem, 'getTable') 
-            ? $firstItem->getTable() 
+        $tableName = is_object($firstItem) && method_exists($firstItem, 'getTable')
+            ? $firstItem->getTable()
             : 'export';
         $fileName = $fileName ?? ($tableName.'.xlsx');
 
