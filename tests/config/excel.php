@@ -31,4 +31,4 @@ return [
         'remote_prefix' => null,
         'force_resync_remote' => null,
     ],
-]; 
+];

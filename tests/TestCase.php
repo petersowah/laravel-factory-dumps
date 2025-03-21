@@ -30,9 +30,9 @@ class TestCase extends Orchestra
     {
         config()->set('database.default', 'testbench');
         config()->set('database.connections.testbench', [
-            'driver'   => 'sqlite',
+            'driver' => 'sqlite',
             'database' => ':memory:',
-            'prefix'   => '',
+            'prefix' => '',
         ]);
 
         config()->set('excel', require __DIR__.'/config/excel.php');

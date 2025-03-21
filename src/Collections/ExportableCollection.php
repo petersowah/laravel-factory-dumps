@@ -3,7 +3,6 @@
 namespace PeterSowah\LaravelFactoryDumps\Collections;
 
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use League\Csv\CannotInsertRecord;
 use League\Csv\Exception;

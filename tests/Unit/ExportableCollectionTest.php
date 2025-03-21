@@ -3,7 +3,6 @@
 namespace Tests\Unit;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Maatwebsite\Excel\Facades\Excel;
 use PeterSowah\LaravelFactoryDumps\Collections\ExportableCollection;
@@ -13,6 +12,7 @@ use Tests\TestCase;
 class TestModel extends Model
 {
     protected $table = 'test_table';
+
     protected $fillable = ['name', 'email', 'age'];
 }
 
