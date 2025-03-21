@@ -20,7 +20,8 @@
         "illuminate/contracts": "^10.0||^11.0||^12.0",
         "league/csv": "^9.0",
         "maatwebsite/excel": "^3.1",
-        "spatie/laravel-package-tools": "^1.19"
+        "spatie/laravel-package-tools": "^1.19",
+        "nesbot/carbon": "^2.63||^3.8.4"
     },
     "require-dev": {
         "laravel/pint": "^1.13",
@@ -29,7 +30,7 @@
         "orchestra/testbench": "^10.0.0||^9.0.0||^8.22.0",
         "pestphp/pest": "^2.34",
         "pestphp/pest-plugin-arch": "^2.7",
-        "pestphp/pest-plugin-laravel": "^2.4",
+        "pestphp/pest-plugin-laravel": "^2.4||^3.0",
         "phpstan/extension-installer": "^1.3",
         "phpstan/phpstan-deprecation-rules": "^1.1",
         "phpstan/phpstan-phpunit": "^1.3"
