@@ -22,23 +22,19 @@ class ExportableCollectionTest extends TestCase
     {
         parent::setUp();
 
-        // Ensure directories exist
         File::ensureDirectoryExists(database_path('dumps/csv'));
         File::ensureDirectoryExists(config('factory-dumps.path').'/dumps/excel');
 
-        // Configure the filesystem for Excel exports
         config(['filesystems.disks.local' => [
             'driver' => 'local',
             'root' => config('factory-dumps.path'),
         ]]);
 
-        // Configure Excel to use the local disk
         config(['excel.exports.disk' => 'local']);
     }
 
     protected function tearDown(): void
     {
-        // Clean up test files
         $files = [
             database_path('dumps/csv/test.csv'),
             database_path('dumps/csv/test_table.csv'),
@@ -57,7 +53,6 @@ class ExportableCollectionTest extends TestCase
         parent::tearDown();
     }
 
-    /** @test */
     public function it_can_pluck_specific_columns()
     {
         $collection = new ExportableCollection([
@@ -73,7 +68,6 @@ class ExportableCollectionTest extends TestCase
         ], $result->toArray());
     }
 
-    /** @test */
     public function it_can_pluck_a_single_column()
     {
         $collection = new ExportableCollection([
@@ -89,7 +83,6 @@ class ExportableCollectionTest extends TestCase
         ], $result->toArray());
     }
 
-    /** @test */
     public function it_can_pluck_with_custom_column_names()
     {
         $collection = new ExportableCollection([
@@ -109,7 +102,6 @@ class ExportableCollectionTest extends TestCase
         ], $result->toArray());
     }
 
-    /** @test */
     public function it_can_export_collection_to_csv_file()
     {
         $collection = new ExportableCollection([
@@ -128,7 +120,6 @@ class ExportableCollectionTest extends TestCase
         $this->assertStringContainsString('2,Jane,jane@example.com', $csvContent);
     }
 
-    /** @test */
     public function it_uses_model_table_name_when_no_filename_provided_for_csv()
     {
         $model = new TestModel(['name' => 'John', 'email' => 'john@example.com']);
@@ -139,7 +130,6 @@ class ExportableCollectionTest extends TestCase
         $this->assertEquals(database_path('dumps/csv/test_table.csv'), $filePath);
     }
 
-    /** @test */
     public function it_uses_export_as_default_name_for_array_data_in_csv()
     {
         $collection = new ExportableCollection([
@@ -151,7 +141,6 @@ class ExportableCollectionTest extends TestCase
         $this->assertEquals(database_path('dumps/csv/export.csv'), $filePath);
     }
 
-    /** @test */
     public function it_can_export_collection_to_excel_file()
     {
         $collection = new ExportableCollection([
@@ -173,7 +162,6 @@ class ExportableCollectionTest extends TestCase
         $this->assertEquals(config('factory-dumps.path').'/dumps/excel/test.xlsx', $filePath);
     }
 
-    /** @test */
     public function it_uses_model_table_name_when_no_filename_provided_for_excel()
     {
         $model = new TestModel(['name' => 'John', 'email' => 'john@example.com']);
@@ -193,7 +181,6 @@ class ExportableCollectionTest extends TestCase
         $this->assertEquals(config('factory-dumps.path').'/dumps/excel/test_table.xlsx', $filePath);
     }
 
-    /** @test */
     public function it_uses_export_as_default_name_for_array_data_in_excel()
     {
         $collection = new ExportableCollection([
