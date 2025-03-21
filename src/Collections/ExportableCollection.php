@@ -70,7 +70,7 @@ class ExportableCollection extends Collection
         if ($firstItem === null) {
             throw new \RuntimeException('Cannot export an empty collection.');
         }
-        
+
         if ($columns === null) {
             $columns = $firstItem instanceof \Illuminate\Database\Eloquent\Model
                 ? $firstItem->getFillable()
