@@ -6,7 +6,12 @@ parameters:
     paths:
         - src
         - config
-        - database
+        - tests
     tmpDir: build/phpstan
-    checkOctaneCompatibility: true
-    checkModelProperties: true
+    ignoreErrors:
+        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Collection<int, Illuminate\\Database\\Eloquent\\Model>\|Illuminate\\Database\\Eloquent\\Model::toCsv\(\).$#'
+        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Collection<int, Illuminate\\Database\\Eloquent\\Model>\|Illuminate\\Database\\Eloquent\\Model::toExcel\(\).$#'
+        - '#Call to an undefined method Pest\\PendingCalls\\TestCall::#'
+        - message: '#Parameter \#1 \$items of class PeterSowah\\LaravelFactoryDumps\\Collections\\ExportableCollection constructor expects#'
+          path: tests/Unit/ExportableCollectionTest.php
+    reportUnmatchedIgnoredErrors: false

@@ -1,6 +1,6 @@
 <?php
 
-namespace PeterSowah\LaravelFactoryDumps\Tests;
+namespace Tests;
 
 use Illuminate\Support\Facades\File;
 use Maatwebsite\Excel\ExcelServiceProvider;
@@ -11,15 +11,23 @@ class ExportableFactoryTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
+
         $this->loadMigrationsFrom('../workbench/database/migrations');
         $this->loadLaravelMigrations();
         $this->artisan('migrate', ['--database' => 'testbench'])->run();
-        // optimize clear
         $this->artisan('optimize:clear');
-        File::cleanDirectory(config('factory-dumps.path'));
+
+        // Ensure the export directories exist and are writable
+        $basePath = config('factory-dumps.path');
+        File::ensureDirectoryExists($basePath);
+        File::ensureDirectoryExists($basePath.'/dumps/excel');
+        File::ensureDirectoryExists($basePath.'/dumps/csv');
+
+        // Clean up any existing files
+        File::cleanDirectory($basePath);
     }
 
     protected function getPackageProviders($app): array
@@ -43,6 +51,16 @@ class ExportableFactoryTest extends TestCase
             'driver' => 'sqlite',
             'database' => ':memory:',
             'prefix' => '',
+        ]);
+
+        // Set up a writable path for factory dumps
+        $dumpPath = __DIR__.'/temp';
+        $app['config']->set('factory-dumps.path', $dumpPath);
+
+        // Configure the filesystem for Excel exports
+        $app['config']->set('filesystems.disks.default', [
+            'driver' => 'local',
+            'root' => $dumpPath,
         ]);
     }
 
@@ -69,10 +87,8 @@ class ExportableFactoryTest extends TestCase
     /** @test */
     public function it_can_export_all_users_to_csv_using_static_method(): void
     {
-        // Create some users
         User::factory()->count(10)->create();
 
-        // Export using static method
         $csvFile = User::toCsv();
 
         $this->assertFileExists($csvFile);
@@ -82,10 +98,8 @@ class ExportableFactoryTest extends TestCase
     /** @test */
     public function it_can_export_all_users_to_excel_using_static_method(): void
     {
-        // Create some users
         User::factory()->count(10)->create();
 
-        // Export using static method
         $excelFile = User::toExcel();
 
         $this->assertFileExists($excelFile);
@@ -104,5 +118,15 @@ class ExportableFactoryTest extends TestCase
         $this->assertFileExists($csvFile);
         $this->assertStringContainsString('custom-users.xlsx', $excelFile);
         $this->assertStringContainsString('custom-users.csv', $csvFile);
+    }
+
+    protected function tearDown(): void
+    {
+        // Clean up the temporary directory
+        if (file_exists(__DIR__.'/temp')) {
+            File::deleteDirectory(__DIR__.'/temp');
+        }
+
+        parent::tearDown();
     }
 }

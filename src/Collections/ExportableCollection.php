@@ -3,7 +3,7 @@
 namespace PeterSowah\LaravelFactoryDumps\Collections;
 
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Collection as BaseCollection;
 use Illuminate\Support\Facades\File;
 use League\Csv\CannotInsertRecord;
 use League\Csv\Exception;
@@ -15,6 +15,21 @@ use PeterSowah\LaravelFactoryDumps\Exports\ExportFactory;
 class ExportableCollection extends Collection
 {
     /**
+     * Pluck specific columns from the collection.
+     *
+     * @param  string|array  $value
+     * @param  string|null  $key
+     */
+    public function pluck($value, $key = null): BaseCollection
+    {
+        $columns = is_array($value) ? $value : [$value];
+
+        return new BaseCollection($this->map(function ($item) use ($columns) {
+            return collect($item)->only($columns)->toArray();
+        })->all());
+    }
+
+    /**
      * Export the collection to a CSV file.
      *
      * @throws UnavailableStream
@@ -23,21 +38,22 @@ class ExportableCollection extends Collection
      */
     public function toCsv(?string $fileName = null): string
     {
-        // Define the default file name if not provided
-        $fileName = $fileName ?? ($this->first()->getTable().'.csv');
+        $firstItem = $this->first();
+        $tableName = is_object($firstItem) && method_exists($firstItem, 'getTable')
+            ? $firstItem->getTable()
+            : 'export';
+        $fileName = $fileName ?? ($tableName.'.csv');
 
-        // Use database_path() for a better path structure
         $filePath = database_path("dumps/csv/{$fileName}");
 
-        // Ensure the directory exists before creating the file
         File::ensureDirectoryExists(database_path('dumps/csv'));
 
-        // Create CSV Writer and write headers and content
         $csv = Writer::createFromPath($filePath, 'w+');
-        $csv->insertOne(array_keys($this->first()->toArray())); // Insert headers
+        $firstItemArray = is_object($firstItem) ? $firstItem->toArray() : $firstItem;
+        $csv->insertOne(array_keys($firstItemArray));
 
         foreach ($this->toArray() as $row) {
-            $csv->insertOne($row); // Insert each row of data
+            $csv->insertOne($row);
         }
 
         return $filePath;
@@ -48,28 +64,24 @@ class ExportableCollection extends Collection
      */
     public function toExcel(?string $fileName = null): string
     {
-        $fileName = $fileName ?? ($this->first()->getTable().'.xlsx');
+        $firstItem = $this->first();
+        $tableName = is_object($firstItem) && method_exists($firstItem, 'getTable')
+            ? $firstItem->getTable()
+            : 'export';
+        $fileName = $fileName ?? ($tableName.'.xlsx');
 
         $relativePath = 'dumps/excel';
-        $fullPath = database_path($relativePath);
+        $basePath = config('factory-dumps.path');
+        $fullPath = $basePath.'/'.$relativePath;
 
-        if (! File::exists($fullPath)) {
-            File::makeDirectory($fullPath, 0755, true);
-        }
-
-        $databaseDisk = [
-            'driver' => 'local',
-            'root' => database_path(),
-        ];
-
-        Config::set('filesystems.disks.database', $databaseDisk);
+        File::ensureDirectoryExists($fullPath);
 
         Excel::store(
             new ExportFactory($this->toArray()),
             "{$relativePath}/{$fileName}",
-            'database'
+            'default'
         );
 
-        return database_path("{$relativePath}/{$fileName}");
+        return "{$basePath}/{$relativePath}/{$fileName}";
     }
 }
