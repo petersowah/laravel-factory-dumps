@@ -3,6 +3,7 @@
 namespace PeterSowah\LaravelFactoryDumps\Collections;
 
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as BaseCollection;
 use Illuminate\Support\Facades\File;
 use League\Csv\CannotInsertRecord;
 use League\Csv\Exception;
@@ -18,13 +19,13 @@ class ExportableCollection extends Collection
      *
      * @param  string|array  $value
      * @param  string|null  $key
-     * @return static
+     * @return BaseCollection
      */
-    public function pluck($value, $key = null): self
+    public function pluck($value, $key = null): BaseCollection
     {
         $columns = is_array($value) ? $value : [$value];
 
-        return new static($this->map(function ($item) use ($columns) {
+        return new BaseCollection($this->map(function ($item) use ($columns) {
             return collect($item)->only($columns)->toArray();
         })->all());
     }
