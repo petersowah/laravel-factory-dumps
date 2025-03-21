@@ -24,11 +24,9 @@ class ExportableCollection extends Collection
     {
         $columns = is_array($value) ? $value : [$value];
 
-        $this->items = $this->map(function ($item) use ($columns) {
+        return new static($this->map(function ($item) use ($columns) {
             return collect($item)->only($columns)->toArray();
-        })->all();
-
-        return $this;
+        })->all());
     }
 
     /**
