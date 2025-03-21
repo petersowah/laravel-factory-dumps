@@ -84,17 +84,9 @@ class ExportableCollection extends Collection
             File::makeDirectory($fullPath, 0755, true);
         }
 
-        $databaseDisk = [
-            'driver' => 'local',
-            'root' => database_path(),
-        ];
-
-        Config::set('filesystems.disks.database', $databaseDisk);
-
         Excel::store(
             new ExportFactory($this->toArray()),
-            "{$relativePath}/{$fileName}",
-            'database'
+            "{$relativePath}/{$fileName}"
         );
 
         return database_path("{$relativePath}/{$fileName}");

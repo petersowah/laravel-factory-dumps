@@ -1,6 +1,6 @@
 <?php
 
-namespace PeterSowah\LaravelFactoryDumps\Tests;
+namespace Tests;
 
 use Illuminate\Support\Facades\File;
 use Maatwebsite\Excel\ExcelServiceProvider;
@@ -17,7 +17,6 @@ class ExportableFactoryTest extends TestCase
         $this->loadMigrationsFrom('../workbench/database/migrations');
         $this->loadLaravelMigrations();
         $this->artisan('migrate', ['--database' => 'testbench'])->run();
-        // optimize clear
         $this->artisan('optimize:clear');
         File::cleanDirectory(config('factory-dumps.path'));
     }
@@ -69,10 +68,8 @@ class ExportableFactoryTest extends TestCase
     /** @test */
     public function it_can_export_all_users_to_csv_using_static_method(): void
     {
-        // Create some users
         User::factory()->count(10)->create();
 
-        // Export using static method
         $csvFile = User::toCsv();
 
         $this->assertFileExists($csvFile);
@@ -82,10 +79,8 @@ class ExportableFactoryTest extends TestCase
     /** @test */
     public function it_can_export_all_users_to_excel_using_static_method(): void
     {
-        // Create some users
         User::factory()->count(10)->create();
 
-        // Export using static method
         $excelFile = User::toExcel();
 
         $this->assertFileExists($excelFile);
