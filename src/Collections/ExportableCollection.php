@@ -38,26 +38,22 @@ class ExportableCollection extends Collection
      */
     public function toCsv(?string $fileName = null): string
     {
-        // Define the default file name if not provided
         $firstItem = $this->first();
         $tableName = is_object($firstItem) && method_exists($firstItem, 'getTable')
             ? $firstItem->getTable()
             : 'export';
         $fileName = $fileName ?? ($tableName.'.csv');
 
-        // Use database_path() for a better path structure
         $filePath = database_path("dumps/csv/{$fileName}");
 
-        // Ensure the directory exists before creating the file
         File::ensureDirectoryExists(database_path('dumps/csv'));
 
-        // Create CSV Writer and write headers and content
         $csv = Writer::createFromPath($filePath, 'w+');
         $firstItemArray = is_object($firstItem) ? $firstItem->toArray() : $firstItem;
-        $csv->insertOne(array_keys($firstItemArray)); // Insert headers
+        $csv->insertOne(array_keys($firstItemArray));
 
         foreach ($this->toArray() as $row) {
-            $csv->insertOne($row); // Insert each row of data
+            $csv->insertOne($row);
         }
 
         return $filePath;
@@ -78,10 +74,8 @@ class ExportableCollection extends Collection
         $basePath = config('factory-dumps.path');
         $fullPath = $basePath.'/'.$relativePath;
 
-        // Ensure the directory exists and is writable
         File::ensureDirectoryExists($fullPath);
 
-        // Store the Excel file using the configured disk
         Excel::store(
             new ExportFactory($this->toArray()),
             "{$relativePath}/{$fileName}",
