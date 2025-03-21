@@ -9,7 +9,7 @@ use PeterSowah\LaravelFactoryDumps\Traits\ExportableFactory;
 
 class User extends Authenticatable
 {
-    use ExportableFactory, HasFactory;
+    use ExportableFactory;
 
     /**
      * The attributes that are mass assignable.
