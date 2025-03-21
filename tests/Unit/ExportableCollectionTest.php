@@ -100,7 +100,7 @@ class ExportableCollectionTest extends TestCase
         $result = $collection->pluck([
             'name' => 'Full Name',
             'email' => 'Email Address',
-            'age' => 'Age'
+            'age' => 'Age',
         ]);
 
         $this->assertEquals([

@@ -3,7 +3,6 @@
 namespace PeterSowah\LaravelFactoryDumps\Collections;
 
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Collection as BaseCollection;
 use Illuminate\Support\Facades\File;
 use League\Csv\CannotInsertRecord;
 use League\Csv\Exception;
@@ -38,6 +37,7 @@ class ExportableCollection extends Collection
                 foreach ($result as $key => $value) {
                     $renamed[$columns[$key]] = $value;
                 }
+
                 return $renamed;
             }
 
