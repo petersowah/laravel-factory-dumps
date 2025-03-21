@@ -19,7 +19,6 @@ class ExportableCollection extends Collection
      *
      * @param  string|array  $value
      * @param  string|null  $key
-     * @return BaseCollection
      */
     public function pluck($value, $key = null): BaseCollection
     {
