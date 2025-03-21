@@ -8,10 +8,12 @@ parameters:
         - config
         - tests
     tmpDir: build/phpstan
+    treatPhpDocTypesAsCertain: false
     ignoreErrors:
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Collection<int, Illuminate\\Database\\Eloquent\\Model>\|Illuminate\\Database\\Eloquent\\Model::toCsv\(\).$#'
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Collection<int, Illuminate\\Database\\Eloquent\\Model>\|Illuminate\\Database\\Eloquent\\Model::toExcel\(\).$#'
         - '#Call to an undefined method Pest\\PendingCalls\\TestCall::#'
         - message: '#Parameter \#1 \$items of class PeterSowah\\LaravelFactoryDumps\\Collections\\ExportableCollection constructor expects#'
           path: tests/Unit/ExportableCollectionTest.php
+        - message: '#Trait PeterSowah\\LaravelFactoryDumps\\Traits\\ExportableFactory is used zero times and is not analysed.#'
     reportUnmatchedIgnoredErrors: false

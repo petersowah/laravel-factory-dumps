@@ -39,7 +39,7 @@ class ExportableCollection extends Collection
     public function toCsv(?string $fileName = null): string
     {
         $firstItem = $this->first();
-        $tableName = is_object($firstItem) && method_exists($firstItem, 'getTable')
+        $tableName = $firstItem instanceof \Illuminate\Database\Eloquent\Model
             ? $firstItem->getTable()
             : 'export';
         $fileName = $fileName ?? ($tableName.'.csv');
@@ -62,13 +62,20 @@ class ExportableCollection extends Collection
     /**
      * Export the collection to an Excel file.
      */
-    public function toExcel(?string $fileName = null): string
+    public function toExcel(?string $filename = null, ?array $columns = null): string
     {
+        $filename = $filename ?? $this->getDefaultFilename('xlsx');
         $firstItem = $this->first();
-        $tableName = is_object($firstItem) && method_exists($firstItem, 'getTable')
-            ? $firstItem->getTable()
-            : 'export';
-        $fileName = $fileName ?? ($tableName.'.xlsx');
+
+        if ($firstItem === null) {
+            throw new \RuntimeException('Cannot export an empty collection.');
+        }
+
+        if ($columns === null) {
+            $columns = $firstItem instanceof \Illuminate\Database\Eloquent\Model
+                ? $firstItem->getFillable()
+                : array_keys(is_array($firstItem) ? $firstItem : $firstItem->toArray());
+        }
 
         $relativePath = 'dumps/excel';
         $basePath = config('factory-dumps.path');
@@ -77,11 +84,21 @@ class ExportableCollection extends Collection
         File::ensureDirectoryExists($fullPath);
 
         Excel::store(
-            new ExportFactory($this->toArray()),
-            "{$relativePath}/{$fileName}",
+            new ExportFactory($this->pluck($columns)->toArray()),
+            "{$relativePath}/{$filename}",
             'default'
         );
 
-        return "{$basePath}/{$relativePath}/{$fileName}";
+        return "{$basePath}/{$relativePath}/{$filename}";
+    }
+
+    protected function getDefaultFilename(string $extension): string
+    {
+        $firstItem = $this->first();
+        $tableName = $firstItem instanceof \Illuminate\Database\Eloquent\Model
+            ? $firstItem->getTable()
+            : 'export';
+
+        return "{$tableName}.{$extension}";
     }
 }
