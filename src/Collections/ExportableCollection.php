@@ -20,11 +20,27 @@ class ExportableCollection extends Collection
      * @param  string|array  $value
      * @param  string|null  $key
      */
-    public function pluck($value, $key = null): BaseCollection
+    public function pluck($value, $key = null): ExportableCollection
     {
-        $columns = is_array($value) ? $value : [$value];
+        if (is_string($value)) {
+            return new static($this->map(function ($item) use ($value) {
+                return [$value => $item[$value]];
+            })->all());
+        }
 
-        return new BaseCollection($this->map(function ($item) use ($columns) {
+        $columns = $value;
+        $hasCustomNames = array_filter($columns, 'is_string', ARRAY_FILTER_USE_KEY);
+
+        return new static($this->map(function ($item) use ($columns, $hasCustomNames) {
+            if ($hasCustomNames) {
+                $result = collect($item)->only(array_keys($columns))->toArray();
+                $renamed = [];
+                foreach ($result as $key => $value) {
+                    $renamed[$columns[$key]] = $value;
+                }
+                return $renamed;
+            }
+
             return collect($item)->only($columns)->toArray();
         })->all());
     }

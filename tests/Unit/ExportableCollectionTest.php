@@ -90,6 +90,26 @@ class ExportableCollectionTest extends TestCase
     }
 
     /** @test */
+    public function it_can_pluck_with_custom_column_names()
+    {
+        $collection = new ExportableCollection([
+            ['id' => 1, 'name' => 'John', 'email' => 'john@example.com', 'age' => 30],
+            ['id' => 2, 'name' => 'Jane', 'email' => 'jane@example.com', 'age' => 25],
+        ]);
+
+        $result = $collection->pluck([
+            'name' => 'Full Name',
+            'email' => 'Email Address',
+            'age' => 'Age'
+        ]);
+
+        $this->assertEquals([
+            ['Full Name' => 'John', 'Email Address' => 'john@example.com', 'Age' => 30],
+            ['Full Name' => 'Jane', 'Email Address' => 'jane@example.com', 'Age' => 25],
+        ], $result->toArray());
+    }
+
+    /** @test */
     public function it_can_export_collection_to_csv_file()
     {
         $collection = new ExportableCollection([
