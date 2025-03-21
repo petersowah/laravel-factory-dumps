@@ -75,17 +75,19 @@ class ExportableCollection extends Collection
         $fileName = $fileName ?? ($tableName.'.xlsx');
 
         $relativePath = 'dumps/excel';
-        $fullPath = database_path($relativePath);
+        $basePath = config('factory-dumps.path');
+        $fullPath = $basePath.'/'.$relativePath;
 
-        if (! File::exists($fullPath)) {
-            File::makeDirectory($fullPath, 0755, true);
-        }
+        // Ensure the directory exists and is writable
+        File::ensureDirectoryExists($fullPath);
 
+        // Store the Excel file using the configured disk
         Excel::store(
             new ExportFactory($this->toArray()),
-            "{$relativePath}/{$fileName}"
+            "{$relativePath}/{$fileName}",
+            'default'
         );
 
-        return database_path("{$relativePath}/{$fileName}");
+        return "{$basePath}/{$relativePath}/{$fileName}";
     }
 }

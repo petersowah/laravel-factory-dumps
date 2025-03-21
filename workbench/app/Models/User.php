@@ -5,10 +5,11 @@ namespace Workbench\App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use PeterSowah\LaravelFactoryDumps\Traits\ExportableFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable
 {
-    use ExportableFactory;
+    use HasFactory, ExportableFactory;
 
     /**
      * The attributes that are mass assignable.

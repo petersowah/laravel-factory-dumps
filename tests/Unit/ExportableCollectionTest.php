@@ -24,7 +24,16 @@ class ExportableCollectionTest extends TestCase
 
         // Ensure directories exist
         File::ensureDirectoryExists(database_path('dumps/csv'));
-        File::ensureDirectoryExists(database_path('dumps/excel'));
+        File::ensureDirectoryExists(config('factory-dumps.path').'/dumps/excel');
+
+        // Configure the filesystem for Excel exports
+        config(['filesystems.disks.local' => [
+            'driver' => 'local',
+            'root' => config('factory-dumps.path'),
+        ]]);
+
+        // Configure Excel to use the local disk
+        config(['excel.exports.disk' => 'local']);
     }
 
     protected function tearDown(): void
@@ -34,9 +43,9 @@ class ExportableCollectionTest extends TestCase
             database_path('dumps/csv/test.csv'),
             database_path('dumps/csv/test_table.csv'),
             database_path('dumps/csv/export.csv'),
-            database_path('dumps/excel/test.xlsx'),
-            database_path('dumps/excel/test_table.xlsx'),
-            database_path('dumps/excel/export.xlsx'),
+            config('factory-dumps.path').'/dumps/excel/test.xlsx',
+            config('factory-dumps.path').'/dumps/excel/test_table.xlsx',
+            config('factory-dumps.path').'/dumps/excel/export.xlsx',
         ];
 
         foreach ($files as $file) {
@@ -141,7 +150,7 @@ class ExportableCollectionTest extends TestCase
             }
         );
 
-        $this->assertEquals(database_path('dumps/excel/test.xlsx'), $filePath);
+        $this->assertEquals(config('factory-dumps.path').'/dumps/excel/test.xlsx', $filePath);
     }
 
     /** @test */
@@ -161,7 +170,7 @@ class ExportableCollectionTest extends TestCase
             }
         );
 
-        $this->assertEquals(database_path('dumps/excel/test_table.xlsx'), $filePath);
+        $this->assertEquals(config('factory-dumps.path').'/dumps/excel/test_table.xlsx', $filePath);
     }
 
     /** @test */
@@ -182,6 +191,6 @@ class ExportableCollectionTest extends TestCase
             }
         );
 
-        $this->assertEquals(database_path('dumps/excel/export.xlsx'), $filePath);
+        $this->assertEquals(config('factory-dumps.path').'/dumps/excel/export.xlsx', $filePath);
     }
 }

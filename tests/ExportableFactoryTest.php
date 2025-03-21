@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\ExcelServiceProvider;
 use Workbench\App\Models\User;
 
@@ -14,11 +15,20 @@ class ExportableFactoryTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->loadMigrationsFrom('../workbench/database/migrations');
         $this->loadLaravelMigrations();
         $this->artisan('migrate', ['--database' => 'testbench'])->run();
         $this->artisan('optimize:clear');
-        File::cleanDirectory(config('factory-dumps.path'));
+
+        // Ensure the export directories exist and are writable
+        $basePath = config('factory-dumps.path');
+        File::ensureDirectoryExists($basePath);
+        File::ensureDirectoryExists($basePath.'/dumps/excel');
+        File::ensureDirectoryExists($basePath.'/dumps/csv');
+
+        // Clean up any existing files
+        File::cleanDirectory($basePath);
     }
 
     protected function getPackageProviders($app): array
@@ -42,6 +52,16 @@ class ExportableFactoryTest extends TestCase
             'driver' => 'sqlite',
             'database' => ':memory:',
             'prefix' => '',
+        ]);
+
+        // Set up a writable path for factory dumps
+        $dumpPath = __DIR__.'/temp';
+        $app['config']->set('factory-dumps.path', $dumpPath);
+
+        // Configure the filesystem for Excel exports
+        $app['config']->set('filesystems.disks.default', [
+            'driver' => 'local',
+            'root' => $dumpPath,
         ]);
     }
 
@@ -99,5 +119,15 @@ class ExportableFactoryTest extends TestCase
         $this->assertFileExists($csvFile);
         $this->assertStringContainsString('custom-users.xlsx', $excelFile);
         $this->assertStringContainsString('custom-users.csv', $csvFile);
+    }
+
+    protected function tearDown(): void
+    {
+        // Clean up the temporary directory
+        if (file_exists(__DIR__.'/temp')) {
+            File::deleteDirectory(__DIR__.'/temp');
+        }
+
+        parent::tearDown();
     }
 }
