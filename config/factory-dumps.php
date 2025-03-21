@@ -2,5 +2,7 @@
 
 // config for PeterSowah/LaravelFactoryDumps
 return [
-    'path' => env('FACTORY_DUMPS_PATH', __DIR__.'/../workbench/database/dumps'),
+    'path' => config('app.env') === 'testing' 
+        ? __DIR__.'/../workbench/database/dumps'
+        : storage_path('app/dumps'),
 ];
