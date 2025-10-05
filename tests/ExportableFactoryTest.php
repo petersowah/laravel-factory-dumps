@@ -4,6 +4,7 @@ namespace Tests;
 
 use Illuminate\Support\Facades\File;
 use Maatwebsite\Excel\ExcelServiceProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Workbench\App\Models\User;
 
 class ExportableFactoryTest extends TestCase
@@ -64,7 +65,7 @@ class ExportableFactoryTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_export_factory_data_to_csv_after_creation(): void
     {
         $users = User::factory()->count(10)->create();
@@ -74,7 +75,7 @@ class ExportableFactoryTest extends TestCase
         $this->assertStringContainsString('users.csv', $csvFile);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_export_factory_data_to_excel_after_creation(): void
     {
         $users = User::factory()->count(10)->create();
@@ -84,7 +85,7 @@ class ExportableFactoryTest extends TestCase
         $this->assertStringContainsString('users.xlsx', $excelFile);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_export_all_users_to_csv_using_static_method(): void
     {
         User::factory()->count(10)->create();
@@ -95,7 +96,7 @@ class ExportableFactoryTest extends TestCase
         $this->assertStringContainsString('users.csv', $csvFile);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_export_all_users_to_excel_using_static_method(): void
     {
         User::factory()->count(10)->create();
@@ -106,7 +107,7 @@ class ExportableFactoryTest extends TestCase
         $this->assertStringContainsString('users.xlsx', $excelFile);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_export_with_custom_filename(): void
     {
         User::factory()->count(10)->create();
