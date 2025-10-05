@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\File;
 use Maatwebsite\Excel\Facades\Excel;
 use PeterSowah\LaravelFactoryDumps\Collections\ExportableCollection;
 use PeterSowah\LaravelFactoryDumps\Exports\ExportFactory;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class TestModel extends Model
@@ -53,6 +54,7 @@ class ExportableCollectionTest extends TestCase
         parent::tearDown();
     }
 
+    #[Test]
     public function it_can_pluck_specific_columns()
     {
         $collection = new ExportableCollection([
@@ -68,6 +70,7 @@ class ExportableCollectionTest extends TestCase
         ], $result->toArray());
     }
 
+    #[Test]
     public function it_can_pluck_a_single_column()
     {
         $collection = new ExportableCollection([
@@ -83,6 +86,7 @@ class ExportableCollectionTest extends TestCase
         ], $result->toArray());
     }
 
+    #[Test]
     public function it_can_pluck_with_custom_column_names()
     {
         $collection = new ExportableCollection([
@@ -102,6 +106,7 @@ class ExportableCollectionTest extends TestCase
         ], $result->toArray());
     }
 
+    #[Test]
     public function it_can_export_collection_to_csv_file()
     {
         $collection = new ExportableCollection([
@@ -120,6 +125,7 @@ class ExportableCollectionTest extends TestCase
         $this->assertStringContainsString('2,Jane,jane@example.com', $csvContent);
     }
 
+    #[Test]
     public function it_uses_model_table_name_when_no_filename_provided_for_csv()
     {
         $model = new TestModel(['name' => 'John', 'email' => 'john@example.com']);
@@ -130,6 +136,7 @@ class ExportableCollectionTest extends TestCase
         $this->assertEquals(database_path('dumps/csv/test_table.csv'), $filePath);
     }
 
+    #[Test]
     public function it_uses_export_as_default_name_for_array_data_in_csv()
     {
         $collection = new ExportableCollection([
@@ -141,6 +148,7 @@ class ExportableCollectionTest extends TestCase
         $this->assertEquals(database_path('dumps/csv/export.csv'), $filePath);
     }
 
+    #[Test]
     public function it_can_export_collection_to_excel_file()
     {
         $collection = new ExportableCollection([
@@ -162,6 +170,7 @@ class ExportableCollectionTest extends TestCase
         $this->assertEquals(config('factory-dumps.path').'/dumps/excel/test.xlsx', $filePath);
     }
 
+    #[Test]
     public function it_uses_model_table_name_when_no_filename_provided_for_excel()
     {
         $model = new TestModel(['name' => 'John', 'email' => 'john@example.com']);
@@ -181,6 +190,7 @@ class ExportableCollectionTest extends TestCase
         $this->assertEquals(config('factory-dumps.path').'/dumps/excel/test_table.xlsx', $filePath);
     }
 
+    #[Test]
     public function it_uses_export_as_default_name_for_array_data_in_excel()
     {
         $collection = new ExportableCollection([
