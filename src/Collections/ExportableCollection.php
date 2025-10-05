@@ -20,9 +20,7 @@ class ExportableCollection extends Collection
      *
      * @param  string|array  $value
      * @param  string|null  $key
-     *
      * @return \Illuminate\Support\Collection<(int|string), non-empty-array<string, mixed>>|\Illuminate\Support\Collection<(int|string), array>
-     *
      */
     public function pluck($value, $key = null): \Illuminate\Support\Collection
     {
