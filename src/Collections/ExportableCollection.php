@@ -4,7 +4,6 @@ namespace PeterSowah\LaravelFactoryDumps\Collections;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\File;
 use League\Csv\CannotInsertRecord;
 use League\Csv\Exception;
@@ -22,7 +21,7 @@ class ExportableCollection extends Collection
      * @param  string|array  $value
      * @param  string|null  $key
      */
-    public function pluck($value, $key = null): SupportCollection
+    public function pluck($value, $key = null): ExportableCollection|\Illuminate\Support\Collection
     {
         if (is_string($value)) {
             return $this->map(function ($item) use ($value) {
